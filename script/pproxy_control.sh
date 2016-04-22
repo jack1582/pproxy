@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CUR_DIR=$(dirname $0)
+CUR_DIR=$(dirname $(dirname $(readlink -f $0)))
 
 BIN_NAME="./pproxy"
 DEFAULT_CONF="./conf/pproxy.conf"
@@ -8,13 +8,15 @@ INTRO="get more info from github.com/hidu/pproxy"
 
 
 CONF_FILE=$2
+CONF_PATH=$(readlink -f "$DEFAULT_CONF")
+
 
 if [ -z "$CONF_FILE" ];then
     cd $CUR_DIR
     CONF_FILE="$DEFAULT_CONF"
+    CONF_PATH=$(readlink -f "$CONF_FILE")
 fi
 
-CONF_PATH=$(readlink -f "$CONF_FILE")
 
 cd $CUR_DIR
 
@@ -40,6 +42,8 @@ function start(){
 }
 
 function stop(){
+    killall pproxy
+    exit
     list=$(ps aux|grep "$RUN_CMD"|grep -v grep)
     if [ -z "${list}" ];then
        echo "no process to kill"

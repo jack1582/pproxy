@@ -10,4 +10,5 @@ cd $(dirname $0)
 
 export GO15VENDOREXPERIMENT=1
 
-go install
+#go install
+go build 
